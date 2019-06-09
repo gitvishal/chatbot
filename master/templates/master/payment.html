@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title%}Payment{% endblock %}
+{% block extraStatistic %}
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+{% endblock %}
+
+{% block container %}
+
+<div class="container">
+	<form class="form-horizontal" role="form" method="post" action="{% url 'master:room-payment' booking_id %}">
+		{% csrf_token %}
+		{{form.booking_id}}
+		<fieldset>
+			<legend>Payment</legend>
+			<div class="form-group">
+			<label class="col-sm-3 control-label" for="{{form.card_holder_name.name}}">{{form.card_holder_name.label}}</label>
+			<div class="col-sm-9">
+				{{ form.card_holder_name }}
+				{{ form.card_holder_name.errors }}
+			</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label" for="{{form.card_number.name}}">{{ form.card_number.label }}</label>
+				<div class="col-sm-9">
+				  {{ form.card_number }}
+				  {{ form.card_number.errors }}
+				</div>
+		  </div>
+		  <div class="form-group">
+			<label class="col-sm-3 control-label" for="{{form.expiry_month.name}}">Expiration Date</label>
+			<div class="col-sm-9">
+			  <div class="row">
+				<div class="col-xs-3">
+				  {{ form.expiry_month }}
+				  {{ form.expiry_month.errors }}
+
+				</div>
+				<div class="col-xs-3">
+					{{form.expiry_year}}
+					{{ form.expiry_year.errors }}
+
+				</div>
+			  </div>
+			</div>
+		  </div>
+		  <div class="form-group">
+			<label class="col-sm-3 control-label" for="{{form.cvv.name}}">{{form.cvv.label}}</label>
+			<div class="col-sm-3">
+			  {{ form.cvv }}
+			  {{ form.cvv.errors }}
+			</div>
+		  </div>
+		  <div class="form-group">
+			<div class="col-sm-offset-3 col-sm-9">
+				<input type="submit" class="btn btn-success" name="payment" value="Pay Now">
+			</div>
+		  </div>
+		</fieldset>
+	</form>
+</div>
+{% endblock %}
+

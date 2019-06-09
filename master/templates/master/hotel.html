@@ -1,0 +1,30 @@
+{% extends 'base.html' %}	
+{% load static %}
+
+{% block title%}hotel{% endblock %}
+{% block background %}{% static "boto-static/img/Dhaka-Hotels.jpg" %}{% endblock %}
+
+{% block navigationLink %}
+  <li class="nav-item">
+	<a class="nav-link" href="{% url 'master:home' %}">home</a>
+  </li>
+  <li class="nav-item">
+	<a class="nav-link" href="{% url 'master:hotel' %}">hotel</a>
+  </li>
+  
+  
+{% endblock %}
+
+
+
+{% block container %}
+
+
+<div id="room-data">
+  {% include 'master/inclusion/room.html' with rooms=rooms form=form rooms_previous=rooms_previous rooms_next=rooms_next %}
+</div>
+      
+{% endblock %}
+
+
+ 

@@ -1,0 +1,32 @@
+{% load static %}
+
+<ul class="p-0">
+	<ul class="p-0">
+		<li>
+			<div class="row comments mb-2">
+				<div class="col-md-2 offset-md-2 col-sm-2 offset-sm-2 col-3 offset-1 text-center user-img">
+			    	<img id="profile-photo" src="http://nicesnippets.com/demo/man04.png" class="rounded-circle" />
+				</div>
+				<div class="col-md-7 col-sm-7 col-8 comment rounded mb-2">
+					<h4 class="m-0"><a href="#">Me</a></h4>
+				    <time class="text-white ml-3">{{current_time|date:"P"}}</time>
+				    <like></like>
+				    <p class="mb-0 text-white">{{user_question}}</p>
+				</div>
+			</div>
+		</li>
+	</ul>
+	<li>
+		<div class="row comments mb-2">
+			<div class="col-md-2 col-sm-2 col-3 text-center user-img">
+		    	<img id="profile-photo" src="http://nicesnippets.com/demo/man03.png" class="rounded-circle" />
+			</div>
+			<div class="col-md-9 col-sm-9 col-9 comment rounded mb-2">
+				<h4 class="m-0"><a href="#">VRB bot </a></h4>
+			    <time class="text-white ml-3">{{current_time|date:"P"}}</time>
+			    <like></like>
+			    <p class="mb-0 text-white">{{chatbot_answer|safe}}</p>
+			</div>
+		</div>
+	</li>
+</ul>

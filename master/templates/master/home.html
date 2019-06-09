@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title%}Welcome.org{% endblock %}
+
+
+{% block navigationLink %}
+  <li class="nav-item">
+	<a class="nav-link" href="{% url 'master:home' %}">home</a>
+  </li>
+  <li class="nav-item">
+	<a class="nav-link" href="{% url 'master:hotel' %}">hotel</a>
+  </li>
+  
+{% endblock %}
+
+{% block container %}
+	<div class="container">
+	  <div class="row">
+		<div class="col-lg-8 col-md-10 mx-auto">
+		  <div class="post-preview">
+			<a href="post.html">
+			  <h2 class="post-title">
+				Popular Destination
+			  </h2>
+			  <h3 class="post-subtitle">
+				use our chatbot to find your destination
+			  </h3>
+			</a>
+
+			<p class="post-meta">Posted by
+			  <a href="#">VacationRentalBusinessBot</a>
+			  Explore some of the best tips from around the city</p>
+		  </div>
+		  <hr>
+		</div>
+	  </div>
+	</div>
+
+	{% include 'master/inclusion/chatbot.html' %}
+{% endblock %}

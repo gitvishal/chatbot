@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title%}Welcome.org{% endblock %}
+
+
+{% block navigationLink %}
+  <li class="nav-item">
+	<a class="nav-link" href="{% url 'master:home' %}">home</a>
+  </li>
+  <li class="nav-item">
+	<a class="nav-link" href="{% url 'master:hotel' %}">hotel</a>
+  </li>
+  
+{% endblock %}
+
+
+{% block container %}
+	<div class="container">
+	  <div class="row">
+	  	<table>
+	  		<tr>
+			<td>
+				<a href="">
+					<img src="" alt="No image"/ >
+				</a>
+			</td>
+			<td>
+				hotel: {{room.hotel.name}} &nbsp; &nbsp; {{room.hotel.hotel_type}}<br>
+				Room No: {{room.room_details.room_code}}<br>
+				Room Type: {{room.room_details.room_type}}<br>
+				<span>{{room.price}}</span><br>
+				Description : {{room.room_details.description}}<br>
+				<a href="{% url 'master:room-booking' room.room_pk %}">Book</a>
+			</td>
+		</tr>
+	  	</table>
+	  </div>
+	</div>
+{% endblock %}

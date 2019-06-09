@@ -1,0 +1,121 @@
+{% load static %}
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href={% static "chatbot/css/custom.css" %}>
+    <style type="text/css">
+    /* Button used to open the chat form - fixed at the bottom of the page */
+    	.circle {
+  border-radius: 50%;
+  height: 50px;
+  
+  background-color: #555;
+    	  color: white;
+    	  padding: 12px 20px;
+    	  border: none;
+    	  cursor: pointer;
+    	  opacity: 0.8;
+    	  position: fixed;
+    	  bottom: 23px;
+    	  right: 28px;
+    	  width: 280px;
+}
+/* The popup chat - hidden by default */
+    	.chat-popup {
+		 
+		  position: fixed;
+		  bottom: 0;
+		  right: 15px;
+		  border: 3px solid #f1f1f1;
+		  z-index: 9;
+
+		}
+		
+    </style>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script>
+	$(document).ready(function(){
+
+		$( "#submit-chatbot" ).click(function(event) {
+			var question = $( "#user-query" ).val();
+
+			if (question)
+
+				$.post( "{% url 'master:chatbot-ajax' %}", {
+					'question' : question,
+					'csrfmiddlewaretoken': '{{ csrf_token }}',
+					'chatbot_session_id': '{{ chatbot_session_id }}'
+		 		}).done(function(data) {
+		 			$( "#conversation" ).append(data['conversation']);
+		 			$("#user-query").val('');
+
+				});
+
+		});
+	});
+
+	function openForm() {
+		document.getElementById("id-chatbot").style.display = "block";
+	}
+
+	function closeForm() {
+		document.getElementById("id-chatbot").style.display = "none";
+	}
+</script>
+
+<button class="circle" onclick="openForm()">Chat With Us</button>
+
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+
+<div class="row mt-8 chat-popup" id="id-chatbot">
+	<div class="col-md-12  col-sm-12  col-12 comments-main pt-4 rounded">
+		<div id="conversation">
+			<ul class="p-0">
+				<li>
+					<div class="row comments mb-2">
+						<div class="col-md-2 col-sm-2 col-3 text-center user-img">
+					    	<img id="profile-photo" src="http://nicesnippets.com/demo/man01.png" class="rounded-circle" />
+						</div>
+						<div class="col-md-9 col-sm-9 col-9 comment rounded mb-2">
+							<h4 class="m-0"><a href="#">Chatbot</a></h4>
+						    <time class="text-white ml-3"></time>
+						    <like></like>
+						    <p class="mb-0 text-white">Thank you for visiting.</p>
+						</div>
+					</div>
+				</li>
+			</ul>
+
+			
+					<div class="row comments mb-2">
+						<div class="col-md-2 col-sm-2 col-3 text-center user-img">
+					    	<img id="profile-photo" src="http://nicesnippets.com/demo/man01.png" class="rounded-circle" />
+						</div>
+						<div class="col-md-9 col-sm-9 col-9 comment rounded mb-2">
+							<h4 class="m-0"><a href="#">Chatbot </a></h4>
+						    <time class="text-white ml-3"></time>
+						    <like></like>
+						    <p class="mb-0 text-white">VACATION RENTAL BUSINESS BOT! How can i help you?</p>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="row comment-box-main p-3 rounded-bottom">
+	  		<div class="col-md-9 col-sm-9 col-9 pr-0 comment-box">
+			  <input type="text" id="user-query" class="form-control" placeholder="comment ...."  />
+	  		</div>
+	  		<div class="col-md-3 col-sm-2 col-2 pl-0 text-center send-btn">
+	  			<button class="btn btn-info" id="submit-chatbot">Send</button>
+	  		</div>
+		</div>
+		<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+	</div>
+</div>
+
+

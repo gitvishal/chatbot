@@ -1,0 +1,59 @@
+{% load static %}
+
+<form id="room-form" class="form-inline" method="get" >
+    <div class="form-group">
+      <label for="city">{{form.city.label}}:</label>
+      {{form.city}}
+    </div>
+
+    <div class="form-group">
+      <label for="room_type">{{form.room_type.label}}:</label>
+      {{form.room_type}}
+    </div>
+    
+    <button type="submit" class="btn btn-default">Search</button>
+</form>
+
+<table>
+	<tr>
+		<th>Hotel Room</th>
+		<th>Details</th>
+	</tr>
+	{% for room in rooms %}
+		<tr>
+			<td>
+				<a href="{% url 'master:room' %}?room_url={{room.room_details.url}}">
+					<img src="
+						{%for img in room.images%}
+							{{hotel_api_url}}/media/{{img.image}}
+						{%endfor%}" 
+						alt="No image"/ >
+				</a>
+			</td>
+			<td>
+
+				hotel: {{room.hotel.name}} &nbsp; &nbsp; {{room.hotel.hotel_type}}<br>
+				Room No: {{room.room_details.room_code}}<br>
+				Room Type: {{room.room_details.room_type}}<br>
+				{% for price in room.price %}
+					<span>{{price.stay}} - {{price.price}}</span><br>
+				{% endfor %}
+				Description : {{room.room_details.description}}<br>
+				<a href="{% url 'master:room' %}?room_url={{room.room_details.url}}">View</a>
+			</td>
+		</tr>
+    {% endfor %}
+</table>
+<button {% if rooms_previous %} onclick="get_room('{{rooms_previous}}');"{% endif %}>Previous</button> | <button {% if rooms_next %} onclick="get_room('{{rooms_next}}');"{% endif %}>Next</button> | <button class="submit-btn">Booking</button>
+
+<script>
+	function get_room(url){
+		$.get( "{% url 'master:room-ajax' %}", {
+			'city' : $('#id_city').val(),
+			'room_url': url,
+			'room_type': $('#id_room_type').val()
+			}).done(function(data) {
+				$( "#room-data" ).html(data['room_data']);
+			});
+	}
+</script>
