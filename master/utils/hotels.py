@@ -6,9 +6,7 @@ from django.template.loader import render_to_string
 
 api_url = '%s/%s' % (settings.CHOWGULE_HOTEL_API, 'api/v1/{search_params}room/')
 
-
-
-def chowgule_hotel_rendering_api_call(url, search):
+def chowgule_hotel_rendering_api_call(url, search=None):
 	req = requests.get(url='%s?s=%s' % (url, search) if search else url)
 	req.raise_for_status()
 	return req.json()

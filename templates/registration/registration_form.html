@@ -3,7 +3,7 @@
 
 {% block title %}{% trans "Register for an account" %}{% endblock %}
 
-{% block content %}
+{% block container %}
 <form method="post" action="">
 	{% csrf_token %}
 	{% for field in form %}

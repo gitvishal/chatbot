@@ -3,7 +3,7 @@
 
 {% block title %}{% trans "Resend Activation Email" %}{% endblock %}
 
-{% block content %}
+{% block container %}
 <form method="post" action="">
     {% csrf_token %}
     {{ form.as_p }}
