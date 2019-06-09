@@ -16,6 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.utils.html import format_html
 from django.utils.dateparse import parse_datetime
+from django.utils import timezone
 from .models import Booking
 import uuid
 import json
@@ -115,8 +116,8 @@ class BookingView(CreateView):
 		'status':Booking.BOOKING_INPROGRESS
 	}
 
-	def get(self, room_id, *args, **kwargs):
-		self.room_id = room_id
+	def get(self, *args, **kwargs):
+		self.room_id = kwargs.pop('room_id')
 		return super().get(*args, **kwargs)
 
 	def get_context_data(self, *args, **kwargs):
@@ -124,8 +125,8 @@ class BookingView(CreateView):
 		context['room_id'] = self.room_id
 		return context
 
-	def post(self, room_id, *args, **kwargs):
-		self.room_id = room_id
+	def post(self, *args, **kwargs):
+		self.room_id = kwargs.pop('room_id')
 		return super().post(*args, **kwargs)
 
 @method_decorator([login_required,], name='dispatch')
@@ -143,13 +144,14 @@ class PaymentView(FormView):
 		try:
 			payment = booking_payment(form, self.request.user)
 			booking.status = Booking.BOOKING_SUCCESS
-			booking.transaction_id = payment['payment']['transaction_id']
+			booking.transaction_id = payment['payment']['payment_transaction_id']
 			booking.save()
 			email = send_success_mail(
-				self.request.user.username,
+				self.request.user,
 				booking.transaction_id,
-				payment['payment']['price']
+				payment['payment']['payment_price']
 			)
+			return super().form_valid(form)
 		except Exception as e:
 			booking.status = Booking.BOOKING_FAILED
 			booking.save()
@@ -159,19 +161,17 @@ class PaymentView(FormView):
 				{'error':str(e)}
 			)
 
-		return super().form_valid(form)
-
 	def get_context_data(self, *args, **kwargs):
 		context = super().get_context_data(*args, **kwargs)
 		context['booking_id'] = self.booking_id
 		return context
 
-	def get(self, pk, *args, **kwargs):
-		self.booking_id = pk
+	def get(self, *args, **kwargs):
+		self.booking_id = kwargs.pop('pk')
 		return super().get(*args, **kwargs)
 
-	def post(self, pk, *args, **kwargs):
-		self.booking_id = pk
+	def post(self, *args, **kwargs):
+		self.booking_id = kwargs.pop('pk')
 		return super().post(*args, **kwargs)
 
 class PaymentSuccess(TemplateView):

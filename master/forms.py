@@ -52,14 +52,7 @@ def get_booking_form(last_booking):
 			fields = '__all__'
 
 			widgets = {
-				'check_in': DateTimePickerInput(
-					options={
-						"showClose": True,
-						"showClear": True,
-						"showTodayButton": True,
-						"minDate":last_booking,
-					}
-				),
+				'check_in': DateTimePickerInput(options={"minDate":str(last_booking),}),
 			}
 
 	return BookingForm

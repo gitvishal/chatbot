@@ -1,4 +1,5 @@
 import requests
+import json
 from django.conf import settings
 from datetime import timedelta
 from django.core.mail import send_mail
@@ -29,9 +30,10 @@ def detail_room(room):
 
 def authenticate(username=None, password=None):
 	url = '%s/api/obtain-auth-token/' % (settings.CHOWGULE_HOTEL_API,)
-	req = requests.post(url=auth_url, json={
-		'username':settings.HOTEL_USERNAME, 
-		'password':settings.HOTEL_PASSWORD
+	req = requests.post(url=url, 
+		json={
+			'username':username, 
+			'password':password
 		}
 	)
 	req.raise_for_status()
@@ -39,25 +41,30 @@ def authenticate(username=None, password=None):
 
 def booking_payment(form, user):
 	booking = form.cleaned_data['booking_id']
-	auth = authenticate(username=username, password=password)
+	auth = authenticate(
+		username=settings.HOTEL_USERNAME, 
+		password=settings.HOTEL_PASSWORD
+	)
 	headers = {'Authorization': 'Token {token}'.format(token=auth['token'])}
 
 	data = {
-		'check_in':booking.check_in,
-		'check_out':booking.check_in + timedelta(days=booking.days),
+		'check_in':str(booking.check_in),
+		'check_out':str(booking.check_in + timedelta(days=booking.days)),
 		'room':booking.room_id,
 		'created_by':auth['user_id'],
-		'payment':{'meta_data':form.cleaned_data},
+		'payment':{
+			'meta_data':json.dumps({x:str(y) for x,y in form.cleaned_data.items()}), 
+		},
 		'merchants_user_email':user.email,
 	}
-	url = '%s/api/v1/reservation' % (settings.CHOWGULE_HOTEL_API,)
-	req = requests.post(url=auth_url, json={})
+	url = '%s/api/v1/reservation/' % (settings.CHOWGULE_HOTEL_API,)
+	req = requests.post(url=url, json=data, headers=headers)
 	req.raise_for_status()
 	return req.json()
 
-def send_success_mail(username, transaction_id, amount):
+def send_success_mail(user, transaction_id, amount):
 	user_detail = {
-		'username':username, 
+		'username':user.username, 
 		'transaction_id':transaction_id, 
 		'amount':amount
 	}

@@ -1,10 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
-{% load bootstrap3 %}       {# import bootstrap4/bootstrap3 #}
-{% bootstrap_css %}         {# Embed Bootstrap CSS #}
-{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
-           {# Adds date-picker required JS and CSS #}
+{% load bootstrap3 %}
 
 {% block title%}Booking{% endblock %}
 
@@ -30,7 +26,8 @@
 		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
 
-	{{ form.media }} 
+	{% bootstrap_css %}
+	{% bootstrap_javascript jquery='full' %} 
 
 {% endblock %}
 
@@ -42,21 +39,28 @@
 					<div class="booking-form">
 						<div class="form-header">
 							<h1>Make your reservation</h1>
-							{% csrf_token %}
+							
 						</div>
 						<form method="post" action="{% url 'master:room-booking' room_id %}"> 
+							{{ form.media }}
+							{% csrf_token %}
+							{{ form.user }}
+							{{ form.status }}
+							{{ form.room_id }}
 							<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
 										<span class="form-label">Check In</span>
-										{{form.check_in}}
+										{{ form.check_in }}
+										{{ form.check_in.errors }}
 									</div>
 									<span class="in-out hidden-xs hidden-sm">&#8652;</span>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<span class="form-label">Days</span>
-										{{form.days}}
+										{{ form.days }}
+										{{ form.days.errors }}
 									</div>
 								</div>
 							</div>
